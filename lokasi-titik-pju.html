@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lokasi Titik PJU - Penerangan Jalan Umum Dusun Kiarakoneng I</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 </head>
 <body>
 
@@ -19,32 +20,79 @@
   <h2 class="page-title">Lokasi Titik PJU</h2>
 
   <div class="content-card">
-    
-        <p>Berikut adalah sebaran titik Penerangan Jalan Umum (PJU) tenaga surya di Dusun Kiarakoneng I.</p>
-        <div class="map-box" style="aspect-ratio:16/9; margin: 20px 0;">
-          <iframe
-            src="https://www.google.com/maps?q=Kiarakoneng,Jawa+Barat&output=embed"
-            loading="lazy"
-            allowfullscreen
-            title="Peta lokasi titik PJU Dusun Kiarakoneng I">
-          </iframe>
-        </div>
-        <p><em>Catatan: peta di atas masih berupa placeholder. Ganti tautan pada atribut <code>src</code>
-        iframe dengan embed Google Maps yang menandai setiap titik lampu secara spesifik.</em></p>
-        <h3>Daftar Titik (contoh)</h3>
-        <ul>
-          <li>Titik 1 &mdash; Gerbang masuk Dusun Kiarakoneng I</li>
-          <li>Titik 2 &mdash; Simpang jalan utama dusun</li>
-          <li>Titik 3 &mdash; Area balai warga</li>
-          <li>Titik 4 &mdash; Jalan menuju area persawahan</li>
-        </ul>
-        
+
+        <p>Berikut adalah 12 titik Penerangan Jalan Umum (PJU) tenaga surya di Dusun Kiarakoneng I beserta koordinat presisinya. Klik penanda pada peta atau tombol pada daftar di bawah untuk membuka lokasi persis di Google Maps.</p>
+
+        <div id="peta-titik-pju" class="map-box" style="aspect-ratio:16/9; margin: 20px 0;" aria-label="Peta titik-titik PJU Dusun Kiarakoneng I"></div>
+
+        <h3>Daftar Titik PJU</h3>
+        <div class="point-list" id="daftar-titik-pju"></div>
+
   </div>
 </main>
 
 <footer class="site-footer">
   © Pi7ar Cahaya KKN ITB 2026
 </footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  // Daftar titik PJU: id, koordinat (lat, lng)
+  var titikPJU = [
+    { id: "2.01", lat: -6.648944, lng: 107.620676 },
+    { id: "2.02", lat: -6.648434, lng: 107.619803 },
+    { id: "2.03", lat: -6.648177, lng: 107.619507 },
+    { id: "2.04", lat: -6.644204, lng: 107.618034 },
+    { id: "2.05", lat: -6.642159, lng: 107.619175 },
+    { id: "2.06", lat: -6.640222, lng: 107.618947 },
+    { id: "2.07", lat: -6.638931, lng: 107.619215 },
+    { id: "2.08", lat: -6.642808, lng: 107.617339 },
+    { id: "2.09", lat: -6.643478, lng: 107.615896 },
+    { id: "2.10", lat: -6.643474, lng: 107.615152 },
+    { id: "2.11", lat: -6.643409, lng: 107.614761 },
+    { id: "2.12", lat: -6.644528, lng: 107.613798 }
+  ];
+
+  // Inisialisasi peta, dipusatkan di rata-rata seluruh titik
+  var map = L.map('peta-titik-pju').setView([-6.644064, 107.617692], 15);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  var bounds = [];
+  var daftarEl = document.getElementById('daftar-titik-pju');
+
+  titikPJU.forEach(function (titik) {
+    var gmapsUrl = "https://www.google.com/maps?q=" + titik.lat + "," + titik.lng;
+
+    // Marker di peta
+    var marker = L.marker([titik.lat, titik.lng]).addTo(map);
+    marker.bindPopup(
+      "<strong>Titik " + titik.id + "</strong><br>" +
+      titik.lat + ", " + titik.lng + "<br>" +
+      "<a href='" + gmapsUrl + "' target='_blank' rel='noopener'>Buka di Google Maps</a>"
+    );
+    bounds.push([titik.lat, titik.lng]);
+
+    // Kartu di daftar bawah peta
+    var card = document.createElement('div');
+    card.className = 'point-card';
+    card.innerHTML =
+      "<div class='point-card-info'>" +
+        "<span class='point-card-id'>Titik " + titik.id + "</span>" +
+        "<span class='point-card-coord'>" + titik.lat + ", " + titik.lng + "</span>" +
+      "</div>" +
+      "<a class='point-card-link' href='" + gmapsUrl + "' target='_blank' rel='noopener'>Buka di Google Maps</a>";
+    daftarEl.appendChild(card);
+  });
+
+  // Sesuaikan zoom agar semua titik terlihat
+  if (bounds.length > 0) {
+    map.fitBounds(bounds, { padding: [30, 30] });
+  }
+</script>
 
 </body>
 </html>
