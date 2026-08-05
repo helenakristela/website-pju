@@ -175,6 +175,58 @@ main {
   font-size: 0.95rem;
 }
 
+/* Daftar titik PJU */
+.point-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.point-card {
+  background: #f4f1ea;
+  border: 1px solid rgba(63, 74, 94, 0.15);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.point-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.point-card-id {
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 1.02rem;
+}
+
+.point-card-coord {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.point-card-link {
+  align-self: flex-start;
+  background: var(--gold);
+  color: var(--navy-dark);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+.point-card-link:hover,
+.point-card-link:focus-visible {
+  background: var(--gold-dark);
+  color: var(--white);
+}
+
 /* Responsive */
 /* Tablet & HP besar */
 @media (max-width: 800px) {
