@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Penerangan Jalan Umum Dusun Kiarakoneng I</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 </head>
 <body>
 
@@ -17,15 +18,7 @@
 
 <main>
   <div class="home-layout">
-    <div class="map-box" aria-label="Peta lokasi Dusun Kiarakoneng I">
-      <!-- Ganti src di bawah dengan link embed Google Maps lokasi dusun Anda -->
-      <iframe
-        src="https://www.google.com/maps?q=Kiarakoneng,Jawa+Barat&output=embed"
-        loading="lazy"
-        allowfullscreen
-        title="Peta Dusun Kiarakoneng I">
-      </iframe>
-    </div>
+    <div id="peta-titik-pju" class="map-box" aria-label="Peta titik-titik PJU Dusun Kiarakoneng I"></div>
 
     <nav class="menu-list" aria-label="Menu utama">
       <a href="cara-kerja-panel-surya.html">Cara Kerja Lampu Panel Surya</a>
@@ -42,6 +35,49 @@
 <footer class="site-footer">
   © Pi7ar Cahaya KKN ITB 2026
 </footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  // Daftar titik PJU: id, koordinat (lat, lng)
+  var titikPJU = [
+    { id: "2.01", lat: -6.648944, lng: 107.620676 },
+    { id: "2.02", lat: -6.648434, lng: 107.619803 },
+    { id: "2.03", lat: -6.648177, lng: 107.619507 },
+    { id: "2.04", lat: -6.644204, lng: 107.618034 },
+    { id: "2.05", lat: -6.642159, lng: 107.619175 },
+    { id: "2.06", lat: -6.640222, lng: 107.618947 },
+    { id: "2.07", lat: -6.638931, lng: 107.619215 },
+    { id: "2.08", lat: -6.642808, lng: 107.617339 },
+    { id: "2.09", lat: -6.643478, lng: 107.615896 },
+    { id: "2.10", lat: -6.643474, lng: 107.615152 },
+    { id: "2.11", lat: -6.643409, lng: 107.614761 },
+    { id: "2.12", lat: -6.644528, lng: 107.613798 }
+  ];
+
+  var map = L.map('peta-titik-pju').setView([-6.644064, 107.617692], 15);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  var bounds = [];
+
+  titikPJU.forEach(function (titik) {
+    var gmapsUrl = "https://www.google.com/maps?q=" + titik.lat + "," + titik.lng;
+    var marker = L.marker([titik.lat, titik.lng]).addTo(map);
+    marker.bindPopup(
+      "<strong>Titik " + titik.id + "</strong><br>" +
+      titik.lat + ", " + titik.lng + "<br>" +
+      "<a href='" + gmapsUrl + "' target='_blank' rel='noopener'>Buka di Google Maps</a>"
+    );
+    bounds.push([titik.lat, titik.lng]);
+  });
+
+  if (bounds.length > 0) {
+    map.fitBounds(bounds, { padding: [30, 30] });
+  }
+</script>
 
 </body>
 </html>
