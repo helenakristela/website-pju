@@ -77,6 +77,15 @@
   if (bounds.length > 0) {
     map.fitBounds(bounds, { padding: [30, 30] });
   }
+
+  // Perbaiki ukuran peta agar pas dengan layar (fix bug peta melebar di HP)
+  setTimeout(function () {
+    map.invalidateSize();
+  }, 200);
+
+  window.addEventListener('resize', function () {
+    map.invalidateSize();
+  });
 </script>
 
 </body>
