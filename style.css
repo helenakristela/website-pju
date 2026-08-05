@@ -17,6 +17,8 @@
 html, body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -128,12 +130,15 @@ main {
   background: #d9d9d9;
   border-radius: var(--radius);
   height: min(70vh, 560px);
+  width: 100%;
+  max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #555;
   font-weight: 600;
   overflow: hidden;
+  position: relative;
 }
 
 .map-box iframe {
@@ -257,6 +262,9 @@ main {
 
   .site-header {
     padding: 18px 20px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .site-header h1 {
